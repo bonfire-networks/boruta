@@ -82,10 +82,10 @@ defmodule Boruta.Oauth.Authorization.Client do
 
   def authorize(id: id, source: source, redirect_uri: redirect_uri, grant_type: grant_type)
       when not is_nil(id) and not is_nil(redirect_uri) do
-    with %Client{} = client <- ClientsAdapter.get_client(id),
-         :ok <- Client.check_redirect_uri(client, redirect_uri),
+    with %Client{} = client <- ClientsAdapter.get_client(id) |> IO.inspect(label: "client?"),
+         :ok <- Client.check_redirect_uri(client, redirect_uri) |> IO.inspect(label: "ru?"),
          true <- Client.grant_type_supported?(client, grant_type),
-         {:ok, client} <- maybe_check_client_secret(client, source, grant_type) do
+         {:ok, client} <- maybe_check_client_secret(client, source, grant_type) |> IO.inspect(label: "s?") do
       {:ok, client}
     else
       false ->
@@ -96,7 +96,8 @@ defmodule Boruta.Oauth.Authorization.Client do
            error_description: "Client do not support given grant type."
          }}
 
-      _ ->
+      other ->
+        IO.warn(other)
         {:error,
          %Error{
            status: :unauthorized,

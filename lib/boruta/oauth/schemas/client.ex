@@ -113,7 +113,10 @@ defmodule Boruta.Oauth.Client do
            Regex.match?(redirect_uri_regex, redirect_uri)
          end) do
       true -> :ok
-      false -> {:error, "Client redirect_uri do not match."}
+      false -> 
+        IO.inspect(redirect_uri)
+        IO.inspect(client_redirect_uris)
+        {:error, "Client redirect_uri do not match."}
     end
   end
 

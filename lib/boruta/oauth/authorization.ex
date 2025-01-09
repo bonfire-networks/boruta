@@ -178,16 +178,16 @@ defimpl Boruta.Oauth.Authorization, for: Boruta.Oauth.AuthorizationCodeRequest d
              redirect_uri: redirect_uri,
              grant_type: grant_type,
              code_verifier: code_verifier
-           ),
+           ) |> IO.inspect(label: "a1"),
          {:ok, code} <-
            Authorization.Code.authorize(%{
              value: code,
              redirect_uri: redirect_uri,
              client: client,
              code_verifier: code_verifier
-           }),
+           }) |> IO.inspect(label: "a2"),
          {:ok, %ResourceOwner{sub: sub}} <-
-           Authorization.ResourceOwner.authorize(resource_owner: code.resource_owner) do
+           Authorization.ResourceOwner.authorize(resource_owner: code.resource_owner) |> IO.inspect(label: "a3") do
       {:ok,
        %AuthorizationSuccess{
          client: client,

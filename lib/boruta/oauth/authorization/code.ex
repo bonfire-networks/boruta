@@ -36,8 +36,8 @@ defmodule Boruta.Oauth.Authorization.Code do
         client: %Client{id: client_id, pkce: false}
       }) do
     with %Token{client: %Client{id: ^client_id}} = token <-
-           CodesAdapter.get_by(value: value, redirect_uri: redirect_uri),
-         :ok <- Token.ensure_valid(token) do
+           CodesAdapter.get_by(value: value, redirect_uri: redirect_uri) |> IO.inspect(label: "cg"),
+         :ok <- Token.ensure_valid(token) |> IO.inspect(label: "tv") do
       {:ok, token}
     else
       _ ->
@@ -57,9 +57,9 @@ defmodule Boruta.Oauth.Authorization.Code do
         code_verifier: code_verifier
       }) do
     with %Token{client: %Client{id: ^client_id}} = token <-
-           CodesAdapter.get_by(value: value, redirect_uri: redirect_uri),
-         :ok <- check_code_challenge(token, code_verifier),
-         :ok <- Token.ensure_valid(token) do
+           CodesAdapter.get_by(value: value, redirect_uri: redirect_uri) |> IO.inspect(label: "cg2"),
+         :ok <- check_code_challenge(token, code_verifier)  |> IO.inspect(label: "ccc"),
+         :ok <- Token.ensure_valid(token) |> IO.inspect(label: "tv2") do
       {:ok, token}
     else
       {:error, :invalid_code_verifier} ->
