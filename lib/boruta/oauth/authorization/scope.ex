@@ -48,6 +48,8 @@ defmodule Boruta.Oauth.Authorization.Scope do
         {:ok, authorized_scope}
 
       false ->
+        IO.inspect(scopes, label: "Given scopes")
+        IO.inspect(authorized_scopes, label: "authorized_scopes")
         {:error,
          %Boruta.Oauth.Error{
            error: :invalid_scope,
