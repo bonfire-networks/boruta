@@ -28,11 +28,12 @@ defmodule Boruta.Oauth.Authorization.AccessToken do
            }}
           | {:ok, %Token{}}
   def authorize(value: value) do
-    with %Token{} = token <- Boruta.AccessTokensAdapter.get_by(value: value),
+    with %Token{} = token <- Boruta.AccessTokensAdapter.get_by(value: value) |> IO.inspect(label: "AccessToken"),
          :ok <- Token.ensure_valid(token) do
       {:ok, token}
     else
-      _ ->
+      e ->
+        IO.inspect(e, label: "AccessToken '#{value}' - authorize error")
         {:error,
          %Error{
            status: :bad_request,
