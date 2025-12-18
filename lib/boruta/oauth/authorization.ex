@@ -210,7 +210,7 @@ defimpl Boruta.Oauth.Authorization, for: Boruta.Oauth.AuthorizationCodeRequest d
             scope: scope,
             nonce: nonce
           }} <-
-           preauthorize(request),
+           preauthorize(request) |> IO.inspect(label: "t1 preauthorized"),
          {:ok, access_token} <-
            AccessTokensAdapter.create(
              %{
@@ -221,8 +221,8 @@ defimpl Boruta.Oauth.Authorization, for: Boruta.Oauth.AuthorizationCodeRequest d
                scope: scope
              },
              refresh_token: true
-           ),
-         {:ok, _code} <- CodesAdapter.revoke(code) do
+           ) |> IO.inspect(label: "t2 created"),
+         {:ok, _code} <- CodesAdapter.revoke(code) |> IO.inspect(label: "t2 revoked") do
       case String.match?(scope, ~r/#{Scope.openid().name}/) do
         true ->
           id_token = IdToken.generate(%{token: access_token}, nonce)

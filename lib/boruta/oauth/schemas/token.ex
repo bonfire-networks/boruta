@@ -100,11 +100,18 @@ defmodule Boruta.Oauth.Token do
   def revoked?(
         %Token{revoked_at: nil, refresh_token_revoked_at: refresh_token_revoked_at},
         :refresh_token
-      ),
-      do: !is_nil(refresh_token_revoked_at)
+      )
+      do
+        IO.inspect(refresh_token_revoked_at, label: "refresh_token_revoked_at")
+
+         !is_nil(refresh_token_revoked_at)
+      end
 
   def revoked?(%Token{revoked_at: nil}, :access_token), do: false
-  def revoked?(%Token{revoked_at: _}, _type), do: true
+  def revoked?(%Token{revoked_at: revoked_at}, _type) do
+     IO.inspect(revoked_at, label: "revoked_at")
+    true
+  end
 
   @doc """
   Determines if a token is valid, neither expired nor revoked.
